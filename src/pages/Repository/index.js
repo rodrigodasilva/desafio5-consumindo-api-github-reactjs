@@ -54,6 +54,7 @@ export default class Repository extends Component {
   }
 
   loadIssues = async () => {
+    console.log(this.state.page);
     const { match } = this.props;
     const { page, stateIssue } = this.state;
 
@@ -67,23 +68,19 @@ export default class Repository extends Component {
       },
     });
 
-    if (!response) {
-      console.log(response);
-    }
-
     this.setState({ issues: response.data });
   };
 
-  handlePagination = action => {
+  handlePagination = async action => {
     const { page } = this.state;
-    this.setState({
-      page: action === 'next' ? page + 1 : page - 1,
+    await this.setState({
+      page: action === 'next' ? Number(page) + 1 : Number(page) - 1,
     });
     this.loadIssues();
   };
 
-  filterIssue = filter => {
-    this.setState({ stateIssue: filter, page: 1 });
+  filterIssue = async filter => {
+    await this.setState({ stateIssue: filter, page: 1 });
     this.loadIssues();
   };
 
