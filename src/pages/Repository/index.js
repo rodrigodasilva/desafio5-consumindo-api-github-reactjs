@@ -35,7 +35,6 @@ export default class Repository extends Component {
      * Executa as duas chamadas à api e aguarda elas terminarem
      * para seguir a execução do código
      */
-
     const [repository, issues] = await Promise.all([
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
@@ -54,7 +53,6 @@ export default class Repository extends Component {
   }
 
   loadIssues = async () => {
-    console.log(this.state.page);
     const { match } = this.props;
     const { page, stateIssue } = this.state;
 

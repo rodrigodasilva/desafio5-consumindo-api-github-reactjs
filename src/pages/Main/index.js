@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import lowerCase from 'lower-case';
 import { FaGithubAlt, FaPlus, FaSpinner, FaEye, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -13,8 +14,6 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
-    hasError: false,
-    errorText: '',
   };
 
   // Carregar os dados do localStorage
@@ -63,8 +62,6 @@ export default class Main extends Component {
       this.setState({
         repositories: [...repositories, data],
         newRepo: '',
-        hasError: false,
-        errorText: '',
       });
     } catch (error) {
       /**
@@ -73,12 +70,8 @@ export default class Main extends Component {
        */
       const errorText =
         typeof error !== 'string' ? 'Repositório não encontrado' : error;
-      // console.log(errorText);
-      this.setState({
-        hasError: true,
-        loading: false,
-        errorText,
-      });
+
+      toast.error(errorText);
     } finally {
       this.setState({ loading: false });
     }
@@ -88,11 +81,11 @@ export default class Main extends Component {
     this.setState({ newRepo: e.target.value });
   };
 
+  /**
+   * Cria um novo array 'repositories' excluindo o repositorio passado
+   * quando o usuário clica em remover
+   * */
   handleRemoveRepo = repositoryName => {
-    /**
-     * Cria um novo array 'repositories' excluindo o repositorio passado
-     * quando o usuário clica em remover
-     * */
     const { repositories } = this.state;
 
     this.setState({
@@ -103,7 +96,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { newRepo, loading, repositories, hasError, errorText } = this.state;
+    const { newRepo, loading, repositories } = this.state;
 
     return (
       <Container>
@@ -114,7 +107,7 @@ export default class Main extends Component {
           </h1>
         </Header>
 
-        <Form onSubmit={this.handleSubmit} hasError={hasError}>
+        <Form onSubmit={this.handleSubmit}>
           <div>
             <input
               type="text"
@@ -134,8 +127,6 @@ export default class Main extends Component {
               )}
             </SubmitButton>
           </div>
-          {/* {console.log(errorText)} */}
-          {errorText ? <p> {errorText} </p> : ''}
         </Form>
 
         <List>
